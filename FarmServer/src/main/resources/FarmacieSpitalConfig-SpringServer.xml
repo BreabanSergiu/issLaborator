@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="farmacistRepo" class="repository.FarmacistRepositoryDB"/>
+    <bean id="comandaRepo" class="repository.ComandaRepositoryDB"/>
+    <bean id="personalMedicalRepo" class="repository.PersonalMedicalRepositoryDB"/>
+    <bean id="medicamentRepo" class="repository.MedicamenteRepositoryDB"/>
+
+    <bean id="farmacieSpitalService" class="service.FarmacieSpitalService">
+        <constructor-arg ref="comandaRepo"/>
+        <constructor-arg ref="farmacistRepo"/>
+        <constructor-arg ref="personalMedicalRepo"/>
+        <constructor-arg ref="medicamentRepo"/>
+    </bean>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+        <property name="serviceName" value="FarmacieSpitalServer"/>
+        <property name="service" ref="farmacieSpitalService"/>
+        <property name="serviceInterface" value="services.Services"/>
+        <property name="servicePort" value="1099"/>
+    </bean>
+
+</beans>

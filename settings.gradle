@@ -1,0 +1,7 @@
+include 'FarmacieSpital'
+include 'FarmClient'
+include 'FarmPersistence'
+include 'FarmServer'
+include 'FarmModel'
+include 'FarmService'
+

@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':FarmModel')
+    compile project(':FarmService')
+    compile project(':FarmPersistence')
+
+    compile 'org.hibernate:hibernate-core:5.2.10.Final'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'org.springframework:spring-context:5.3.5'
+}

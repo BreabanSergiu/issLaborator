@@ -1,0 +1,14 @@
+controller/LoginView.java
+ controller.LoginView
+controller/LoginController.java
+ controller.LoginController
+StartClientSpring.java
+ StartClientSpring
+controller/MainFarmacistController.java
+ controller.MainFarmacistController
+controller/MainPersonalMController.java
+ controller.MainPersonalMController
+controller/MainViewPersonalM.java
+ controller.MainViewPersonalM
+controller/MainViewFarmacist.java
+ controller.MainViewFarmacist
