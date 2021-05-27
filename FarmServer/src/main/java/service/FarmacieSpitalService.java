@@ -9,7 +9,15 @@ import repository.FarmacistRepository;
 
 import repository.MedicamentRepository;
 import repository.PersonalMedicalRepository;
+import services.Observer;
 import services.Services;
+
+import java.rmi.RemoteException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FarmacieSpitalService implements Services {
 
@@ -17,6 +25,8 @@ public class FarmacieSpitalService implements Services {
     private PersonalMedicalRepository personalMedicalRepository;
     private MedicamentRepository medicamenteRepository;
     private ComandaRepository comandaRepository;
+
+    private Map<String,Observer> connectedClients = new ConcurrentHashMap<>();
 
     public FarmacieSpitalService(FarmacistRepository farmacistRepository, PersonalMedicalRepository personalMedicalRepository, MedicamentRepository medicamenteRepository, ComandaRepository comandaRepository) {
         this.farmacistRepository = farmacistRepository;
@@ -42,12 +52,98 @@ public class FarmacieSpitalService implements Services {
     }
 
     @Override
-    public Farmacist loginFarmacist(String username, String password) {
-        return farmacistRepository.login(username,password);
+    public synchronized Farmacist loginFarmacist(String username, String password, Observer client) throws Exception {
+        Farmacist farmacist =  farmacistRepository.login(username,password);
+        if(farmacist != null){
+            if(connectedClients.get(farmacist.getUsername()) != null){
+               throw new Exception("the chemist is already logged in!");
+            }
+            connectedClients.put(farmacist.getUsername(),client);
+        }
+        return farmacist;
+
     }
 
     @Override
-    public PersonalMedical loginPersonalMedical(String username, String password) {
-        return personalMedicalRepository.login(username,password);
+    public synchronized  PersonalMedical loginPersonalMedical(String username, String password, Observer client) throws Exception {
+        PersonalMedical personalMedical = personalMedicalRepository.login(username,password);
+        if(personalMedical != null){
+            if(connectedClients.get(personalMedical.getUsername()) != null){
+                throw new Exception("the nurse is already logged in! ");
+            }
+            connectedClients.put(personalMedical.getUsername(),client);
+        }
+        return personalMedical;
+    }
+
+
+    @Override
+    public Comanda deleteOrder(Long id) {
+
+        Comanda comanda = comandaRepository.delete(id);
+        notityClients();
+        return comanda;
+    }
+
+    @Override
+    public Medicament getOneMedicineByName(String name) {
+        return medicamenteRepository.findOneMedicineByName(name);
+    }
+
+    @Override
+    public void addOrder(Comanda comanda) {
+        comandaRepository.add(comanda);
+        notityClients();
+    }
+
+    @Override
+    public void updateMedicines(Long id , Medicament medicamentToUpdate) {
+        medicamenteRepository.update(id,medicamentToUpdate);
+    }
+
+    @Override
+    public void updateOrders(Long id, Comanda orderToUpdate) {
+        comandaRepository.update(id,orderToUpdate);
+        notityClients();
+    }
+
+    @Override
+    public void onoreazaComanda(Comanda selectedOrder) {
+        selectedOrder.setStatus("realizata");
+        selectedOrder.getMedicamentList().forEach(x->{
+            Medicament medicament = medicamenteRepository.findOneMedicineByName(x.getNumeMedicament());
+            medicament.setCantitatePeStoc(medicament.getCantitatePeStoc() - 1);
+            this.updateMedicines(x.getId(),medicament);
+        });
+        this.updateOrders(selectedOrder.getId(),selectedOrder);
+    }
+
+    @Override
+    public void comandaPartiala(Comanda selectedOrder) {
+        selectedOrder.setStatus("partial");
+        selectedOrder.getMedicamentList().forEach(x->{
+            Medicament medicament = medicamenteRepository.findOneMedicineByName(x.getNumeMedicament());
+            if(medicament.getCantitatePeStoc() > 0){
+                medicament.setCantitatePeStoc(medicament.getCantitatePeStoc() - 1);
+            }
+            this.updateMedicines(x.getId(),medicament);
+        });
+        this.updateOrders(selectedOrder.getId(),selectedOrder);
+    }
+
+    private final int defaultThread = 5;
+    private void notityClients() {
+        ExecutorService executorService = Executors.newFixedThreadPool(defaultThread);
+        connectedClients.forEach((username,client)->{
+            if(client != null){
+                try{
+                    client.updateGraphicalInterface();
+                } catch (RemoteException e) {
+                    System.err.println("Eroor at updating the client: " +e);
+                }
+            }
+
+        });
+        executorService.shutdown();
     }
 }

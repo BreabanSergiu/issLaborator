@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="533.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainPersonalMController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="533.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainPersonalMController">
    <children>
-      <TableView fx:id="tabelViewListaComenzilorSpital" layoutX="14.0" layoutY="36.0" prefHeight="200.0" prefWidth="436.0">
+      <TableView fx:id="tabelViewListaComenzilorSpital" layoutX="14.0" layoutY="36.0" onMouseClicked="#fillOrderList" prefHeight="200.0" prefWidth="436.0">
         <columns>
             <TableColumn prefWidth="88.0" text="id comanda">
                 <cellValueFactory>
@@ -22,45 +22,46 @@
 
             <TableColumn minWidth="6.0" prefWidth="101.0" text="nivelul">
                 <cellValueFactory>
-                    <PropertyValueFactory property="nivelulMedicamentului" />
+                    <PropertyValueFactory property="nivelulComenzii" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn minWidth="6.0" prefWidth="94.0" text="status" >
+            <TableColumn minWidth="6.0" prefWidth="94.0" text="status">
                 <cellValueFactory>
                     <PropertyValueFactory property="status" />
                 </cellValueFactory>
             </TableColumn>
 
-            <TableColumn minWidth="6.0" prefWidth="150.0" text="Data Punerii Comenzii" >
+            <TableColumn minWidth="6.0" prefWidth="150.0" text="Data Punerii Comenzii">
                 <cellValueFactory>
                     <PropertyValueFactory property="dataCreeriComenzii" />
                 </cellValueFactory>
             </TableColumn>
         </columns>
       </TableView>
-      <Button layoutX="461.0" layoutY="492.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="121.0" text="Adauga comanda" />
-      <Button layoutX="464.0" layoutY="209.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="121.0" text="Sterge comanda" />
+      <Button fx:id="buttonAdaugaComanda" layoutX="329.0" layoutY="457.0" mnemonicParsing="false" onMouseClicked="#addNewOrder" prefHeight="27.0" prefWidth="121.0" text="Adauga comanda" />
+      <Button layoutX="329.0" layoutY="244.0" mnemonicParsing="false" onMouseClicked="#deleteOrder" prefHeight="27.0" prefWidth="121.0" text="Sterge comanda" />
       <Label layoutX="21.0" layoutY="12.0" prefHeight="17.0" prefWidth="147.0" text="Lista comenzilor">
          <font>
             <Font name="Apple Braille" size="18.0" />
          </font>
       </Label>
-      <TableView layoutX="17.0" layoutY="293.0" prefHeight="220.0" prefWidth="264.0">
+      <TableView fx:id="tableViewMedicamenteleComenzii" layoutX="17.0" layoutY="323.0" prefHeight="168.0" prefWidth="171.0">
         <columns>
-          <TableColumn prefWidth="132.0" text="Nume medicament" />
-          <TableColumn prefWidth="131.0" text="Cantitate Medicament" />
+            <TableColumn fx:id="numeMedicament" prefWidth="168.0" text="Nume medicament">
+                <cellValueFactory>
+                    <PropertyValueFactory property="numeMedicament" />
+                </cellValueFactory>
+            </TableColumn>
         </columns>
       </TableView>
-      <Label layoutX="16.0" layoutY="267.0" text="Lista medicamentelor unei comenzi">
+      <Label layoutX="25.0" layoutY="273.0" prefHeight="48.0" prefWidth="164.0" text="Lista medicamentelor unei comenzi" wrapText="true">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField layoutX="336.0" layoutY="293.0" prefHeight="27.0" prefWidth="195.0" promptText="numele medicamentului" />
-      <Button layoutX="336.0" layoutY="326.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="195.0" text="adauga medicament la comanda" />
-      <Spinner layoutX="336.0" layoutY="396.0" prefHeight="27.0" prefWidth="195.0" />
-      <Label layoutX="336.0" layoutY="439.0" text="nivel comanda" />
-      <Label layoutX="336.0" layoutY="378.0" text="numar medicamente" />
-      <Spinner layoutX="336.0" layoutY="455.0" prefHeight="27.0" prefWidth="195.0" />
+      <TextField fx:id="textFieldNumeleMedicamentului" layoutX="250.0" layoutY="327.0" prefHeight="27.0" prefWidth="195.0" promptText="numele medicamentului" />
+      <Button fx:id="buttonAdaugaMedicamentLaComanda" layoutX="250.0" layoutY="364.0" mnemonicParsing="false" onMouseClicked="#addNewMedicineToOrder" prefHeight="27.0" prefWidth="195.0" text="adauga medicament la comanda" />
+      <Label layoutX="250.0" layoutY="406.0" text="nivel comanda" />
+      <Spinner fx:id="spinnerNivelComanda" layoutX="337.0" layoutY="402.0" prefHeight="27.0" prefWidth="108.0" />
    </children>
 </AnchorPane>

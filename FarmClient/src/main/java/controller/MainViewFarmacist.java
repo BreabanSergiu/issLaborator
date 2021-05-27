@@ -12,27 +12,38 @@ import java.io.IOException;
 public class MainViewFarmacist {
 
 
+    private MainFarmacistController mainFarmacistController ;
+    private Stage stage = new Stage();
 
     public MainViewFarmacist(Services services) {
         try{
-            Stage stage = new Stage();
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/farmacie.fxml"));
 
             AnchorPane root = loader.load();
-            MainFarmacistController controller = loader.getController();
-            controller.setService(services);
-
+            mainFarmacistController = loader.getController();
+            mainFarmacistController.setService(services);
+            mainFarmacistController.setMainViewFarmacist(this);
             Scene scene  = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Farmacist View");
-
-            stage.show();
+            stage.setOnCloseRequest(event -> {
+                System.exit(0);
+            });
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("in controllerul de la farmacist : "+e.getMessage());
         }
     }
+
+    public void show(){
+        stage.show();
+    }
+
+    public MainFarmacistController getMainFarmacistController(){
+        return mainFarmacistController;
+    }
+
+
 
 
 }

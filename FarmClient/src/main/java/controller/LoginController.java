@@ -14,12 +14,15 @@ import services.Services;
 
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class LoginController implements Serializable{
+public class LoginController extends UnicastRemoteObject implements Serializable {
 
     Services services;
     Stage primaryStage;
-
+    MainFarmacistController mainFarmacistController;
+    MainPersonalMController mainPersonalMController;
 
     @FXML
     Button buttonLoginAsNurse;
@@ -33,39 +36,55 @@ public class LoginController implements Serializable{
     @FXML
     PasswordField textpasswordField;
 
+    public LoginController() throws RemoteException {
+    }
+
     public void setService(Services services, Stage primaryStage) {
         this.services = services;
         this.primaryStage = primaryStage;
     }
 
     public void loginAsNurse(MouseEvent mouseEvent) {
-
-
         String userName = textFieldUsername.getText();
         String password = textpasswordField.getText();
-        PersonalMedical personalMedical = services.loginPersonalMedical(userName,password);
+        PersonalMedical personalMedical = null;
+        try{
+            personalMedical = services.loginPersonalMedical(userName,password,mainPersonalMController);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,e.getMessage());
+            alert.show();
+        }
         if(personalMedical != null){
-            MainViewPersonalM mainViewPersonalM = new MainViewPersonalM(services);
+            mainPersonalMController.getMainViewPersonalM().show();
             primaryStage.hide();
         }else{
             Alert alert = new Alert(Alert.AlertType.INFORMATION,"Wrong username or password");
             alert.show();
         }
-
-
     }
 
     public void loginAsChemist(MouseEvent mouseEvent) {
 
         String userName = textFieldUsername.getText();
         String password = textpasswordField.getText();
-        Farmacist farmacist = services.loginFarmacist(userName,password);
+        Farmacist farmacist = null;
+        try{
+            farmacist = services.loginFarmacist(userName,password,mainFarmacistController);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,e.getMessage());
+            alert.show();
+        }
         if(farmacist != null){
-            MainViewFarmacist mainViewFarmacist = new MainViewFarmacist(services);
+            mainFarmacistController.getMainViewFarmacist().show();
             primaryStage.hide();
         }else{
             Alert alert = new Alert(Alert.AlertType.INFORMATION,"Wrong username or password");
             alert.show();
         }
+    }
+
+    public void setControllers(MainFarmacistController mainFarmacistController, MainPersonalMController mainPersonalMController) {
+        this.mainPersonalMController = mainPersonalMController;
+        this.mainFarmacistController = mainFarmacistController;
     }
 }

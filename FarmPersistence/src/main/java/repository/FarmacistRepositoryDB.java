@@ -62,12 +62,12 @@ public class FarmacistRepositoryDB implements FarmacistRepository{
     }
 
     @Override
-    public void update(Farmacist e1, Farmacist e2) {
+    public void update(Long id, Farmacist e2) {
 
     }
 
     @Override
-    public Farmacist delete(Farmacist e) {
+    public Farmacist delete(Long id) {
         return null;
     }
 

@@ -4,6 +4,9 @@ import domain.Comanda;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class ComandaRepositoryDB implements ComandaRepository{
 
@@ -15,7 +18,19 @@ public class ComandaRepositoryDB implements ComandaRepository{
     }
     @Override
     public void add(Comanda e) {
-
+        try(Session session = sessionFactory.openSession()){
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                session.save(e);
+                transaction.commit();
+            } catch (Exception exception) {
+                System.out.println(exception);
+                if(transaction!=null){
+                    transaction.rollback();
+                }
+            }
+        }
     }
 
     @Override
@@ -38,12 +53,41 @@ public class ComandaRepositoryDB implements ComandaRepository{
     }
 
     @Override
-    public void update(Comanda e1, Comanda e2) {
-
+    public void update(Long id, Comanda e2) {
+        try(Session session = sessionFactory.openSession()){
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                Query query = session.createQuery("update Comanda set status =:status  where id =:id ").setParameter("id",id).setParameter("status",e2.getStatus());
+                query.executeUpdate();
+                transaction.commit();
+            } catch (Exception exception) {
+                System.out.println(exception);
+                if(transaction!=null){
+                    transaction.rollback();
+                }
+            }
+        }
     }
 
     @Override
-    public Comanda delete(Comanda e) {
+    public Comanda delete(Long id) {
+
+        try(Session session = sessionFactory.openSession()){
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                Comanda comandaReturned = (Comanda) session.createQuery("from Comanda where id = :id").setParameter("id",id).setMaxResults(1).uniqueResult();
+                session.delete(comandaReturned);
+                transaction.commit();
+                return  comandaReturned;
+            } catch (Exception exception) {
+                System.out.println(exception);
+                if(transaction!=null){
+                    transaction.rollback();
+                }
+            }
+        }
         return null;
     }
 

@@ -1,15 +1,15 @@
 package domain;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 public class Comanda implements Entity<Long>, Serializable {
 
     private Long id;
-    private String nivelulMedicamentului;
-    private Date dataCreeriComenzii;
+    private String nivelulComenzii;
+    private LocalDate dataCreeriComenzii;
     private String status;
     private Set<Medicament> medicamentList;
 
@@ -17,8 +17,8 @@ public class Comanda implements Entity<Long>, Serializable {
 
     }
 
-    public Comanda(String nivelulMedicamentului, Date dataCreeriComenzii, String status, Set<Medicament> medicamentList) {
-        this.nivelulMedicamentului = nivelulMedicamentului;
+    public Comanda(String nivelulComenzii, LocalDate dataCreeriComenzii, String status, Set<Medicament> medicamentList) {
+        this.nivelulComenzii = nivelulComenzii;
         this.dataCreeriComenzii = dataCreeriComenzii;
         this.status = status;
         this.medicamentList = medicamentList;
@@ -32,19 +32,19 @@ public class Comanda implements Entity<Long>, Serializable {
         this.medicamentList = medicamentList;
     }
 
-    public String getNivelulMedicamentului() {
-        return nivelulMedicamentului;
+    public String getNivelulComenzii() {
+        return nivelulComenzii;
     }
 
-    public void setNivelulMedicamentului(String nivelulMedicamentului) {
-        this.nivelulMedicamentului = nivelulMedicamentului;
+    public void setNivelulComenzii(String nivelulComenzii) {
+        this.nivelulComenzii = nivelulComenzii;
     }
 
-    public Date getDataCreeriComenzii() {
+    public LocalDate getDataCreeriComenzii() {
         return dataCreeriComenzii;
     }
 
-    public void setDataCreeriComenzii(Date dataCreeriComenzii) {
+    public void setDataCreeriComenzii(LocalDate dataCreeriComenzii) {
         this.dataCreeriComenzii = dataCreeriComenzii;
     }
 
@@ -71,7 +71,7 @@ public class Comanda implements Entity<Long>, Serializable {
     public String toString() {
         return "Comanda{" +
                 "id=" + id +
-                ", nivelulMedicamentului='" + nivelulMedicamentului + '\'' +
+                ", nivelulComenzii='" + nivelulComenzii + '\'' +
                 ", dataCreeriComenzii=" + dataCreeriComenzii +
                 ", status='" + status + '\'' +
                 ", medicamentList=" + medicamentList +

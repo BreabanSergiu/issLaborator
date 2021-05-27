@@ -4,5 +4,6 @@ import domain.Medicament;
 
 public interface MedicamentRepository extends Repository<Long, Medicament> {
 
-    public Iterable<Medicament> findAllMedicinesInStock();
+    Iterable<Medicament> findAllMedicinesInStock();
+    Medicament findOneMedicineByName(String name);
 }

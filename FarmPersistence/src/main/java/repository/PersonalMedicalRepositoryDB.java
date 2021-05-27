@@ -50,12 +50,12 @@ public class PersonalMedicalRepositoryDB implements PersonalMedicalRepository {
     }
 
     @Override
-    public void update(PersonalMedical e1, PersonalMedical e2) {
+    public void update(Long id, PersonalMedical e2) {
 
     }
 
     @Override
-    public PersonalMedical delete(PersonalMedical e) {
+    public PersonalMedical delete(Long id) {
         return null;
     }
 

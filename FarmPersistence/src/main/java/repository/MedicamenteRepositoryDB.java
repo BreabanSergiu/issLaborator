@@ -1,10 +1,12 @@
 package repository;
 
-import domain.Comanda;
+
 import domain.Medicament;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 
 public class MedicamenteRepositoryDB implements MedicamentRepository {
 
@@ -35,6 +37,25 @@ public class MedicamenteRepositoryDB implements MedicamentRepository {
     }
 
     @Override
+    public Medicament findOneMedicineByName(String name) {
+        try(Session session = sessionFactory.openSession()){
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                Medicament medicament = (Medicament) session.createQuery("from Medicament where numemedicament = :nume ").setParameter("nume",name).uniqueResult();
+                transaction.commit();
+                return medicament;
+            } catch (Exception exception) {
+                System.out.println(exception);
+                if(transaction!=null){
+                    transaction.rollback();
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void add(Medicament e) {
 
     }
@@ -45,12 +66,25 @@ public class MedicamenteRepositoryDB implements MedicamentRepository {
     }
 
     @Override
-    public void update(Medicament e1, Medicament e2) {
-
+    public void update(Long id, Medicament e2) {
+        try(Session session = sessionFactory.openSession()){
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                Query query = session.createQuery("update Medicament set cantitatepestoc =:cantitate  where id =:id ").setParameter("id",id).setParameter("cantitate",e2.getCantitatePeStoc());
+                query.executeUpdate();
+                transaction.commit();
+            } catch (Exception exception) {
+                System.out.println(exception);
+                if(transaction!=null){
+                    transaction.rollback();
+                }
+            }
+        }
     }
 
     @Override
-    public Medicament delete(Medicament e) {
+    public Medicament delete(Long id) {
         return null;
     }
 

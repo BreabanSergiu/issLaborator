@@ -10,19 +10,22 @@ import java.io.IOException;
 
 public class LoginView {
 
-    Stage primaryStage;
+    private Stage primaryStage;
 
-    public LoginView(Stage primaryStage, Services services){
+    public LoginView(Stage primaryStage, Services services, MainFarmacistController mainFarmacistController, MainPersonalMController mainPersonalMController){
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/views/login.fxml"));
             AnchorPane root = loader.load();
-            LoginController ctrl = loader.getController();
+            LoginController loginController = loader.getController();
             this.primaryStage = primaryStage;
-            ctrl.setService(services,primaryStage);
+            loginController.setService(services,primaryStage);
+            loginController.setControllers(mainFarmacistController,mainPersonalMController);
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-
+            this.primaryStage.setOnCloseRequest(event -> {
+                System.exit(0);
+            });
             primaryStage.setTitle("Login");
         } catch (IOException e) {
             e.printStackTrace();

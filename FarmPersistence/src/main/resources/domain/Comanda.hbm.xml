@@ -8,7 +8,7 @@
         <id name="id" column="id">
             <generator class="increment"/>
         </id>
-        <property name="nivelulMedicamentului" column="nivel"/>
+        <property name="nivelulComenzii" column="nivel"/>
         <property name="dataCreeriComenzii" column="datacreeri"/>
         <property name="status" column="status"/>
          <set name="medicamentList" table="ComandaMedicament" cascade="save-update" lazy="false">
